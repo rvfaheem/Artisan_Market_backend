@@ -46,9 +46,14 @@ const userSchema = new Schema({
     password:{
         type: String,
         required:true
+    },
+    status:{
+        type:String,
+        default:'pending'
     }
 
 
 })
 
-export const User =model('User',userSchema)
+ const User =model('User',userSchema)
+ export default User

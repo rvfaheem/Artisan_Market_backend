@@ -1,12 +1,13 @@
 import mongoose, {Schema,model} from "mongoose";
-import {user} from './user.js'
-import {sub_category} from './sub_category.js'
+import user from './user.js'
+import sub_category from './sub_category.js'
+import Sub_category from "./sub_category.js";
 
 
 const userSchema =new Schema({
     userId:{
         type:mongoose.Types.ObjectId,
-        ref:User
+        ref:user
     },
     productName:{
         type:String,
@@ -16,13 +17,9 @@ const userSchema =new Schema({
         type:String,
         required:true,
     },
-    category:{
-        type:String,
-        required:true,
-    },
     sub_categoryid:{
-        type:String,
-        required:true,
+        type:mongoose.Types.ObjectId,
+        ref:Sub_category,
     },
     price:{
         type:String,

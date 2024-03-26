@@ -1,11 +1,16 @@
 import express from 'express'
+
+import Add_product from '../models/add_product.js'
 import Sub_category from '../models/sub_category.js'
+import { upload } from '../multer.js'
 const router=express()
 
-router.post('/addproduct',async(req,res)=>{
+router.post('/addproduct',upload.single("Image"),async(req,res)=>{
     try{
         console.log(req.body)
-        let products=new product(req.body)
+        console.log(req.files);
+        console.log(req.file);
+        let products=new Add_product({...req.body,Image:req.file?.filename})
         let response=await products.save()
         res.json(response)
     }
