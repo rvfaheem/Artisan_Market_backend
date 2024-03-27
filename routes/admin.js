@@ -40,6 +40,16 @@ router.get('/viewuser',async(req,res)=>{
     console.log(response)
     res.json(response)
 })
+router.get('/viewuser',async(req,res)=>{
+    let response=await User.find({userType:'artist'})
+    console.log(response)
+    res.json(response)
+})
+router.get('/viewuser',async(req,res)=>{
+    let response=await User.find({userType:'delivery'})
+    console.log(response)
+    res.json(response)
+})
 
 router.put('/manageUser/:id',async(req,res)=>{
     let id=req.params.id

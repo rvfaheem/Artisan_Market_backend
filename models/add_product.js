@@ -21,6 +21,13 @@ const userSchema =new Schema({
         type:mongoose.Types.ObjectId,
         ref:Sub_category,
     },
+    size:{
+        type:String,
+
+    },
+    // framecolours:{
+    //     type:String,
+    // },
     price:{
         type:String,
         required:true,
