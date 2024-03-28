@@ -5,6 +5,7 @@ import Sub_category from '../models/sub_category.js'
 import { upload } from '../multer.js'
 import Exihibition_register from '../models/exihibition_register.js'
 import Exihibition_productadd from '../models/exihiition_product_add.js'
+import Send_offlineexihibition from '../models/send_offline_exihibition.js'
 const router=express()
 
 router.post('/addproduct',upload.single("Image"),async(req,res)=>{
@@ -58,6 +59,20 @@ router.post('/exihibitionproductadd',upload.single("Image"),async(req,res)=>{
     catch(e){
         res.json(e.message)
     }
+})
+
+// router.get('/viewofflineexihibitions/:id',async(req,res)=>{
+//     let id=req.params.id
+//     let response=await Send_offlineexihibition.findById(id)
+//     console.log(response);
+//     res.json(response)
+// })
+
+router.get('/viewofflineexihibitions',async(req,res)=>{
+    console.log(req.body)
+    let response =await Send_offlineexihibition.find()
+    console.log(response)
+    res.json(response)
 })
 
 export default router
