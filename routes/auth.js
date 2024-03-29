@@ -15,6 +15,10 @@ router.post('/register',upload.fields([{name:'image'},{name:"id_proof"}]),async(
             let imagePath=req.files['id_proof'][0].filename
             req.body={...req.body,id_proof:imagePath}
         }
+        if(req.files['artwork']){
+            let imagePath=req.files['artwork'][0].filename
+            req.body={...req.body,id_proof:imagePath}
+        }        
         console.log(req.body)
         let newUser=new User(req.body)
         console.log(newUser,'new User');

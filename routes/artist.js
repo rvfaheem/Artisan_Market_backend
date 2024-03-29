@@ -6,6 +6,9 @@ import { upload } from '../multer.js'
 import Exihibition_register from '../models/exihibition_register.js'
 import Exihibition_productadd from '../models/exihiition_product_add.js'
 import Send_offlineexihibition from '../models/send_offline_exihibition.js'
+import User from '../models/user.js'
+import Category from '../models/category.js'
+import Order from '../models/order.js'
 const router=express()
 
 router.post('/addproduct',upload.single("Image"),async(req,res)=>{
@@ -73,6 +76,41 @@ router.get('/viewofflineexihibitions',async(req,res)=>{
     let response =await Send_offlineexihibition.find()
     console.log(response)
     res.json(response)
+})
+
+router.get('/viewofflineexihibition/:id',async(req,res)=>{
+    let id=req.params.id
+
+    let response=await Send_offlineexihibition.findById(id)
+    console.log(response);
+    res.json(response)
+})
+
+router.get('/viewproductorder/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Add_product.find({artistId:id})
+    console.log(response);
+    let responseData=[]
+    for (const prod of response){
+        console.log(prod,']]]]]]]]]');
+        let orders =await Order.find({productId:prod._id})
+        for(let  ord of orders){
+            console.log(ord,'orders --------------');
+            let user=await User.findById(ord.userId);
+        let sub_categories=await Sub_category.findById(prod.sub_categoryid)
+        let categories=await Category.findById(sub_categories.categoryid)
+        responseData.push({
+            users:user,
+            sub_categories:sub_categories,
+            categories:categories,
+            product:prod,
+            orders:ord
+            
+        })
+        
+    }
+    }
+    res.json(responseData)
 })
 
 export default router

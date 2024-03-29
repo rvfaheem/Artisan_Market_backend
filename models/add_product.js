@@ -2,6 +2,7 @@ import mongoose, {Schema,model} from "mongoose";
 import user from './user.js'
 import sub_category from './sub_category.js'
 import Sub_category from "./sub_category.js";
+import User from "./user.js";
 
 
 const userSchema =new Schema({
@@ -24,6 +25,10 @@ const userSchema =new Schema({
     size:{
         type:String,
 
+    },
+    artistId:{
+        type:mongoose.Types.ObjectId,
+        ref:User
     },
     // framecolours:{
     //     type:String,

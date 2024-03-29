@@ -35,17 +35,17 @@ router.get('/viewcategory',async(req,res)=>{
     res.json(response)
 })
 
-router.get('/viewuser',async(req,res)=>{
+router.get('/viewuserorganiser',async(req,res)=>{
     let response=await User.find({userType:'organiser'})
     console.log(response)
     res.json(response)
 })
-router.get('/viewuser',async(req,res)=>{
+router.get('/viewuserartist',async(req,res)=>{
     let response=await User.find({userType:'artist'})
     console.log(response)
     res.json(response)
 })
-router.get('/viewuser',async(req,res)=>{
+router.get('/viewuserdelivery',async(req,res)=>{
     let response=await User.find({userType:'delivery'})
     console.log(response)
     res.json(response)
