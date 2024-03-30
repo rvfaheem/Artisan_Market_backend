@@ -8,6 +8,10 @@ const userSchema = new Schema({
         type:mongoose.Types.ObjectId,
         ref:User,
     },
+    deliveryId:{
+        type:mongoose.Types.ObjectId,
+        ref:User,
+    },
     productId:{
         type:mongoose.Types.ObjectId,
         ref:Add_product,
@@ -15,6 +19,10 @@ const userSchema = new Schema({
     date:{
         type:Date,
         default:Date.now(),
+    },
+    status:{
+        type:String,
+        default:'pending'
     }
 })
 

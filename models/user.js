@@ -22,7 +22,7 @@ const userSchema = new Schema({
         type:String,
         
     },
-    id_proof:{
+    idproof:{
         type:String,
     },
     category:{

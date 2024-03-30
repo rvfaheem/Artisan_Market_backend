@@ -113,4 +113,12 @@ router.get('/viewproductorder/:id',async(req,res)=>{
     res.json(responseData)
 })
 
+router.put('/manageDelivery/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id)
+    console.log(req.body)
+    let response=await Order.findByIdAndUpdate(id,req.body)
+    console.log(response);
+})
+
 export default router
