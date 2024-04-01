@@ -19,12 +19,12 @@ router.post('/createexihibition',async(req,res)=>{
     }
 })
 
-router.post('/Sendoffline',upload.single("Image"),async(req,res)=>{
+router.post('/Sendoffline',upload.single("image"),async(req,res)=>{
     try{
         console.log(req.body)
         console.log(req.files);
         console.log(req.file);
-        let sendoffline=new Send_offlineexihibition({...req.body,Image:req.file?.filename})
+        let sendoffline=new Send_offlineexihibition({...req.body,image:req.file?.filename})
         
         let response=await sendoffline.save()
         res.json(response)
@@ -34,12 +34,12 @@ router.post('/Sendoffline',upload.single("Image"),async(req,res)=>{
     }
 })
 
-router.post('/Sendonline',upload.single("Image"),async(req,res)=>{
+router.post('/Sendonline',upload.single("image"),async(req,res)=>{
     try{
         console.log(req.body)
         console.log(req.files);
         console.log(req.file);
-        let sendonline=new Send_onlineexihibition({...req.body,Image:req.file?.filename})
+        let sendonline=new Send_onlineexihibition({...req.body,image:req.file?.filename})
         let response=await sendonline.save()
         res.json(response)
     }

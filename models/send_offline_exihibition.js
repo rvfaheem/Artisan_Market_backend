@@ -1,4 +1,5 @@
 import mongoose, {Schema,model} from "mongoose";
+import User from "./user.js";
 
 
 const userSchema=new Schema({
@@ -29,6 +30,10 @@ const userSchema=new Schema({
     endingdate:{
         type:String,
         required:true,
+    },
+    organiserId:{
+        type:mongoose.Types.ObjectId,
+        ref:User
     }
 })
 

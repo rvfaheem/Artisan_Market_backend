@@ -9,6 +9,7 @@ import Send_offlineexihibition from '../models/send_offline_exihibition.js'
 import User from '../models/user.js'
 import Category from '../models/category.js'
 import Order from '../models/order.js'
+import Send_onlineexihibition from '../models/send_online_exihibition.js'
 const router=express()
 
 router.post('/addproduct',upload.single("Image"),async(req,res)=>{
@@ -84,6 +85,22 @@ router.get('/viewofflineexihibition/:id',async(req,res)=>{
     let response=await Send_offlineexihibition.findById(id)
     console.log(response);
     res.json(response)
+})
+
+router.get('/viewonlineexihibitions',async(req,res)=>{
+    console.log(req.body)
+    let response=await Send_onlineexihibition.find()
+    console.log(response);
+    res.json(response)
+})
+
+router.get('/viewonlineexihibitiondetails/:id',async(req,res)=>{
+    let id=req.params.id
+
+    let response=await Send_onlineexihibition.findById(id)
+    console.log(response);
+    res.json(response)
+
 })
 
 router.get('/viewproductorder/:id',async(req,res)=>{

@@ -4,7 +4,7 @@ import { upload } from '../multer.js'
 const router=express()
 
 
-router.post('/register',upload.fields([{name:'image'},{name:"id_proof"}]),async(req,res)=>{
+router.post('/register',upload.fields([{name:'image'},{name:"id_proof"},{name:"artwork"},{name:"experience"}]),async(req,res)=>{
     try{
         console.log(req.files);
         if(req.files['image']){
@@ -17,8 +17,12 @@ router.post('/register',upload.fields([{name:'image'},{name:"id_proof"}]),async(
         }
         if(req.files['artwork']){
             let imagePath=req.files['artwork'][0].filename
-            req.body={...req.body,id_proof:imagePath}
-        }        
+            req.body={...req.body,artwork:imagePath}
+        }
+        if(req.files['experience']){
+            let imagePath=req.files['experience'][0].filename
+            req.body={...req.body,experience:imagePath}
+        }         
         console.log(req.body)
         let newUser=new User(req.body)
         console.log(newUser,'new User');
