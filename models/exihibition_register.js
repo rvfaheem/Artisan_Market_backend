@@ -1,4 +1,7 @@
 import mongoose, {Schema,model} from "mongoose";
+import User from "./user.js";
+import Create_exihibition from "./create_exihibition.js";
+
 
 const userSchema =new Schema({
     productName:{
@@ -23,6 +26,14 @@ const userSchema =new Schema({
     Address:{
         type:String,
         required:true,
+    },
+    userid:{
+        type:mongoose.Types.ObjectId,
+        ref:User
+    },
+    exihibitionid:{
+        type:mongoose.Types.ObjectId,
+        ref:Create_exihibition
     }
 })
 

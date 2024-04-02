@@ -36,12 +36,12 @@ router.get('/viewsubcategory/:id',async(req,res)=>{
 
 router.post
 
-router.post('/exihibitionregister',upload.single("Image"),async(req,res)=>{
+router.post('/exihibitionregister',upload.single("image"),async(req,res)=>{
     try{
         console.log(req.body)
         console.log(req.files);
         console.log(req.file);
-        let exihibitions=new Exihibition_register({...req.body,Image:req.file?.filename})
+        let exihibitions=new Exihibition_register({...req.body,image:req.file?.filename})
         let response=await exihibitions.save()
         res.json(response)
     }
@@ -81,7 +81,6 @@ router.get('/viewofflineexihibitions',async(req,res)=>{
 
 router.get('/viewofflineexihibition/:id',async(req,res)=>{
     let id=req.params.id
-
     let response=await Send_offlineexihibition.findById(id)
     console.log(response);
     res.json(response)
@@ -136,6 +135,13 @@ router.put('/manageDelivery/:id',async(req,res)=>{
     console.log(req.body)
     let response=await Order.findByIdAndUpdate(id,req.body)
     console.log(response);
+})
+
+router.get('/viewexihibitionregister',async(req,res)=>{
+    console.log(req.body)
+    let response=await Exihibition_register.find()
+    console.log(response);
+    res.json(response)
 })
 
 export default router

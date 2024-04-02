@@ -3,6 +3,7 @@ import Create_exihibition from '../models/create_exihibition.js'
 import Send_offlineexihibition from '../models/send_offline_exihibition.js'
 import Send_onlineexihibition from '../models/send_online_exihibition.js'
 import { upload } from '../multer.js'
+import Exihibition_register from '../models/exihibition_register.js'
 
 
 const router=express()
@@ -47,6 +48,21 @@ router.post('/Sendonline',upload.single("image"),async(req,res)=>{
         res.json(e.message)
     }
 })
+
+// router.get('/viewexihibitionartist',async(req,res)=>{
+//     let response=await User.find(Exihibition_register)
+//     console.log(response)
+//     res.json(response)
+// })
+
+// router.put('/manageexhibitionartist/:id',async(req,res)=>{
+//     let id=req.params.id
+//     console.log(id)
+//     console.log(req.body)
+//     let response=await User.findByIdAndUpdate(id,req.body)
+//     console.log(response);
+
+// })
 
 
 

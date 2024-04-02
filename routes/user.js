@@ -6,6 +6,7 @@ import Add_product from '../models/add_product.js';
 import Order from '../models/order.js';
 import Sub_category from '../models/sub_category.js';
 import Category from '../models/category.js';
+import Exihibition_productadd from '../models/exihiition_product_add.js';
 const router=express()
 
 router.post('/payment',async(req,res)=>{
@@ -75,6 +76,38 @@ router.get('/vieworders',async(req,res)=>{
         })
     }
     res.json(responseData)
+})
+
+
+router.get('/viewexihibitionproduct',async(req,res)=>{
+
+    let response=await Exihibition_productadd.aggregate([
+        {
+            $lookup:{
+                from:"sub_categories",
+                foreignField:"_id",
+                localField:"sub_categoryid",
+                as:"sub_category"
+            }
+        },
+        {
+            $unwind: "$sub_category"
+        },
+
+    ])
+
+
+    console.log(response);
+    res.json(response)
+
+})
+
+router.get('/viewexihibitionproductdetails/:id',async(req,res)=>{
+    let id=req.params.id
+
+    let response=await Exihibition_productadd.findById(id)
+    console.log(response);
+    res.json(response)
 })
 
 export default router
