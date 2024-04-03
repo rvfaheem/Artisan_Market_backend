@@ -10,6 +10,7 @@ import User from '../models/user.js'
 import Category from '../models/category.js'
 import Order from '../models/order.js'
 import Send_onlineexihibition from '../models/send_online_exihibition.js'
+import Create_exihibition from '../models/create_exihibition.js'
 const router=express()
 
 router.post('/addproduct',upload.single("Image"),async(req,res)=>{
@@ -86,21 +87,21 @@ router.get('/viewofflineexihibition/:id',async(req,res)=>{
     res.json(response)
 })
 
-router.get('/viewonlineexihibitions',async(req,res)=>{
-    console.log(req.body)
-    let response=await Send_onlineexihibition.find()
-    console.log(response);
-    res.json(response)
-})
+// router.get('/viewonlineexihibitions',async(req,res)=>{
+//     console.log(req.body)
+//     let response=await Send_onlineexihibition.find()
+//     console.log(response);
+//     res.json(response)
+// })
 
-router.get('/viewonlineexihibitiondetails/:id',async(req,res)=>{
-    let id=req.params.id
+// router.get('/viewonlineexihibitiondetails/:id',async(req,res)=>{
+//     let id=req.params.id
 
-    let response=await Send_onlineexihibition.findById(id)
-    console.log(response);
-    res.json(response)
+//     let response=await Send_onlineexihibition.findById(id)
+//     console.log(response);
+//     res.json(response)
 
-})
+// })
 
 router.get('/viewproductorder/:id',async(req,res)=>{
     let id=req.params.id
@@ -137,11 +138,39 @@ router.put('/manageDelivery/:id',async(req,res)=>{
     console.log(response);
 })
 
-router.get('/viewexihibitionregister',async(req,res)=>{
+router.get('/viewexihibitionregister/:id',async(req,res)=>{
     console.log(req.body)
-    let response=await Exihibition_register.find()
+    let id=req.params.id
+    let response=await Exihibition_register.find({userid:id,status:'accept'})
+   let responseData=[]
+    for( let x of response ){
+        let exhibitions=await Create_exihibition.findById(x.exihibitionid)
+        let org=await User.findById(exhibitions?.organisationId)
+        responseData.push({
+            registeration:x,
+            exhibition:exhibitions,
+            organisers:org
+        })
+    }
+
+    console.log(response);
+    res.json(responseData)
+})
+
+router.get('/viewonlineexihibitions',async(req,res)=>{
+    console.log(req.body)
+    let response=await Create_exihibition.find()
     console.log(response);
     res.json(response)
+})
+
+router.get('/viewonlineexihibitiondetails/:id',async(req,res)=>{
+    let id=req.params.id
+
+    let response=await Create_exihibition.findById(id)
+    console.log(response);
+    res.json(response)
+
 })
 
 export default router

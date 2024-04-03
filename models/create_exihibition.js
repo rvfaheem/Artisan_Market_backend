@@ -1,10 +1,16 @@
 import mongoose, {Schema,model} from "mongoose";
+import User from "./user.js";
 
 
 const userSchema =new Schema({
     exihibitionName:{
         type:String,
         required:true,
+    },
+    organisationId:{
+        type:mongoose.Types.ObjectId,
+        ref:User,
+
     },
     sponcers:{
         type:String,

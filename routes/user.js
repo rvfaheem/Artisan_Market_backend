@@ -79,28 +79,28 @@ router.get('/vieworders',async(req,res)=>{
 })
 
 
-router.get('/viewexihibitionproduct',async(req,res)=>{
+// router.get('/viewexihibitionproduct',async(req,res)=>{
 
-    let response=await Exihibition_productadd.aggregate([
-        {
-            $lookup:{
-                from:"sub_categories",
-                foreignField:"_id",
-                localField:"sub_categoryid",
-                as:"sub_category"
-            }
-        },
-        {
-            $unwind: "$sub_category"
-        },
+//     let response=await Exihibition_productadd.aggregate([
+//         {
+//             $lookup:{
+//                 from:"sub_categories",
+//                 foreignField:"_id",
+//                 localField:"sub_categoryid",
+//                 as:"sub_category"
+//             }
+//         },
+//         {
+//             $unwind: "$sub_category"
+//         },
 
-    ])
+//     ])
 
 
-    console.log(response);
-    res.json(response)
+//     console.log(response);
+//     res.json(response)
 
-})
+// })
 
 router.get('/viewexihibitionproductdetails/:id',async(req,res)=>{
     let id=req.params.id
@@ -110,4 +110,10 @@ router.get('/viewexihibitionproductdetails/:id',async(req,res)=>{
     res.json(response)
 })
 
+router.get('/viewexihibitionproduct',async(req,res)=>{
+
+    let response=await Exihibition_productadd.find()
+    console.log(response);
+    res.json(response)
+})
 export default router

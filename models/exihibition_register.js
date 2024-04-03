@@ -34,6 +34,10 @@ const userSchema =new Schema({
     exihibitionid:{
         type:mongoose.Types.ObjectId,
         ref:Create_exihibition
+    },
+    status:{
+        type:String,
+        default:'pending'
     }
 })
 
