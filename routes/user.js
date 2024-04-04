@@ -60,23 +60,46 @@ router.post('/addorder',async(req,res)=>{
     res.json(response)
 })
 
-router.get('/vieworders',async(req,res)=>{
-    let response=await Order.find()
-    let responseData=[]
-    for (const hello of response){
-        let product = await Add_product.findById(hello.productId);
-        let sub_categories=await Sub_category.findById(product.sub_categoryid)
-        let categories=await Category.findById(sub_categories.categoryid)
-        responseData.push({
-            products:product,
-            sub_categorie:sub_categories,
-            category:categories,
-            orders:hello
+router.get('/vieworders/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Order.find({userId:id})
+    console.log(response);
+    let responsedata=[]
+    for (const newresponse of response){
+        console.log(newresponse.productId,'sdsdsf');
+        let products=await Add_product.findById(newresponse.productId)
+        console.log(products,'-==-=-=-=-=-=-=-=-=-=-=-=-');
+        if(products){
 
-        })
+
+            let subcategory=await Sub_category.findById(products.sub_categoryid)
+            console.log(subcategory,'[[[[[[[[[[[');
+            let category=await Category.findById(subcategory.categoryid)
+            console.log(category);
+            
+            // let user=await  User.findById(newresponse.userId)
+            responsedata.push({
+                product:products,
+                order:newresponse,
+                subcategory:subcategory,
+                category:category
+                
+            })
+        }
+
     }
-    res.json(responseData)
+
+    res.json(responsedata)
+
+
+    
 })
+
+// router.get('/vieworders',async(req,res)=>{
+//     let response=await Add_product.find()
+//     console.log(response)
+//     res.json(response)
+// })
 
 
 // router.get('/viewexihibitionproduct',async(req,res)=>{
@@ -116,4 +139,13 @@ router.get('/viewexihibitionproduct',async(req,res)=>{
     console.log(response);
     res.json(response)
 })
+
+router.get('/viewsubcategorywiseproducts/:id',async(req,res)=>{
+    let id=req.params.id
+
+    let response=await Add_product.find({sub_categoryid:id})
+    console.log(response)
+    res.json(response)
+})
+
 export default router
