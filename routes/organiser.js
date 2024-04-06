@@ -25,8 +25,7 @@ const router=express()
 router.post('/createexihibition',upload.single("image"),async(req,res)=>{
     try{
         console.log(req.body)
-        console.log(req.files);
-        console.log(req.file);
+        console.log(req.file,'-------------');
         let create_exihibition=new Create_exihibition({...req.body,image:req.file?.filename})
         
         let response=await create_exihibition.save()

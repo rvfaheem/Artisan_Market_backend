@@ -36,6 +36,10 @@ const userSchema =new Schema({
     price:{
         type:String,
         required:true,
+    },
+    Description:{
+        type:String,
+        required:true,
     }
 
 })

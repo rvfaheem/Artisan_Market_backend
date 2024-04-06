@@ -173,4 +173,83 @@ router.get('/viewonlineexihibitiondetails/:id',async(req,res)=>{
 
 })
 
+router.get('/Viewaddedproducts/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Add_product.find({artistId:id})
+    console.log(response);
+    let responsedata=[]
+    for(const response1 of response){
+        let subcategory=await Sub_category.findById(response1.sub_categoryid)
+        console.log(subcategory);
+        let category=await Category.findById(subcategory.categoryid)
+        console.log(category);
+
+        responsedata.push({
+            subcategory:subcategory,
+            category:category,
+            product:response1
+            
+        })
+    }
+    res.json(responsedata)
+    // let responsea=await Add_product.find()
+    // console.log(response)
+    // res.json(response)
+})
+
+
+router.get('/Vieweditaddedproducts/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Add_product.findById(id)
+    console.log(response);
+
+    let responsedata=[]
+    
+        let subcategory=await Sub_category.findById(response.sub_categoryid)
+        console.log(subcategory);
+        let category=await Category.findById(subcategory.categoryid)
+        console.log(category);
+
+        responsedata.push({
+            subcategory:subcategory,
+            category:category,
+            product:response
+        })
+    
+ 
+        res.json(responsedata)
+    }
+    
+    // let responsea=await Add_product.find()
+    // console.log(response)
+    // res.json(response)
+)
+
+// router.get('/vieweditproduct/:id',async(req,res)=>{
+//     let id=req.params.id
+
+//     let response=await Add_product.findById(id)
+//     console.log(response);
+//     res.json(response)
+
+// })
+
+router.put('/editaddproduct/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
+    if(req.files['Image']){
+        let imagePath=req.files['Image'][0].filename
+        req.body={...req.body,Image:imagePath}
+    }
+   
+    console.log(req.body);
+    let id=req.params.id
+    // console.log(req.body);
+    let response=await Add_product.findByIdAndUpdate(id,req.body)
+    console.log(response);
+})
+
+router.delete('/deleteproduct/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Add_product.findByIdAndDelete(id)
+})
+
 export default router
