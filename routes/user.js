@@ -7,6 +7,8 @@ import Order from '../models/order.js';
 import Sub_category from '../models/sub_category.js';
 import Category from '../models/category.js';
 import Exihibition_productadd from '../models/exihiition_product_add.js';
+import Create_exihibition from '../models/create_exihibition.js';
+
 const router=express()
 
 router.post('/payment',async(req,res)=>{
@@ -140,6 +142,14 @@ router.get('/viewexihibitionproduct',async(req,res)=>{
     res.json(response)
 })
 
+router.get('/online_noti_exihi/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Create_exihibition.findById(id)
+    console.log(response)
+    res.json(response)
+
+})
+
 router.get('/viewsubcategorywiseproducts/:id',async(req,res)=>{
     let id=req.params.id
 
@@ -147,5 +157,23 @@ router.get('/viewsubcategorywiseproducts/:id',async(req,res)=>{
     console.log(response)
     res.json(response)
 })
+
+router.get('/viewonlineexihibitiondetailsuser/:id',async(req,res)=>{
+    let id=req.params.id
+
+    let response=await Create_exihibition.findById(id)
+    console.log(response);
+    res.json(response)
+
+})
+
+// router.get('/viewexihibitionproduct1',async(req,res)=>{
+//     let reponse=await Create_exihibition.find()
+//     console.log(response)
+
+//     let response=await Exihibition_productadd.find(exihibition_id:)
+//     console.log(response);
+//     res.json(response)
+// })
 
 export default router
