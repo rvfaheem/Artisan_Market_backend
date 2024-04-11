@@ -8,6 +8,7 @@ import Sub_category from '../models/sub_category.js';
 import Category from '../models/category.js';
 import Exihibition_productadd from '../models/exihiition_product_add.js';
 import Create_exihibition from '../models/create_exihibition.js';
+import Exihibitionorders from '../models/exihibition_orders.js';
 
 const router=express()
 
@@ -135,12 +136,12 @@ router.get('/viewexihibitionproductdetails/:id',async(req,res)=>{
     res.json(response)
 })
 
-router.get('/viewexihibitionproduct',async(req,res)=>{
+// router.get('/viewexihibitionproduct1',async(req,res)=>{
 
-    let response=await Exihibition_productadd.find()
-    console.log(response);
-    res.json(response)
-})
+//     let response=await Exihibition_productadd.find()
+//     console.log(response);
+//     res.json(response)
+// })
 
 router.get('/online_noti_exihi/:id',async(req,res)=>{
     let id=req.params.id
@@ -167,13 +168,57 @@ router.get('/viewonlineexihibitiondetailsuser/:id',async(req,res)=>{
 
 })
 
-// router.get('/viewexihibitionproduct1',async(req,res)=>{
-//     let reponse=await Create_exihibition.find()
-//     console.log(response)
+// router.get('/viewexihibitionproductlt',async(req,res)=>{
 
-//     let response=await Exihibition_productadd.find(exihibition_id:)
+//     const currentDate = new Date();
+//     console.log(currentDate);
+//     let response = await Exihibition_productadd.find({ enddate: { $lt: currentDate } });
 //     console.log(response);
 //     res.json(response)
 // })
+
+// router.get('/viewexihibitionproductgt',async(req,res)=>{
+
+//     const currentDate = new Date();
+//     let response = await Exihibition_productadd.find({ enddate: { $gt: currentDate } });
+//     console.log(response);
+//     res.json(response)
+// })
+
+router.get('/viewexihibitionproduct1/:id',async(req,res)=>{
+    let id=req.params.id
+
+    let response=await Exihibition_productadd.find({exihibitionid:id})
+    console.log(response,'--------------');
+
+    let responsedata=[]
+    for(const response1 of response){
+        let subcategory=await Sub_category.findById(response1.sub_categoryid)
+        
+        console.log(subcategory,'---------------------------');
+
+        let category=await Category.findById(subcategory.categoryid)
+        console.log(category,'===========================');
+
+        responsedata.push({
+            subcategory:subcategory,
+            category:category,
+            product:response1,
+            
+        })
+
+    
+    }
+    console.log(responsedata);
+    res.json(responsedata)
+})
+
+router.post('/exihiaddorder',async(req,res)=>{
+    console.log(req.body);
+    let newOrder=await Exihibitionorders(req.body)
+    let response=await newOrder.save()
+    console.log(response)
+    res.json(response)
+})
 
 export default router

@@ -1,6 +1,7 @@
 import mongoose, { Schema,model } from "mongoose";
 import Add_product from "./add_product.js";
 import User from "./user.js";
+import Create_exihibition from "./create_exihibition.js";
 
 
 const userSchema = new Schema({
@@ -24,7 +25,8 @@ const userSchema = new Schema({
         type:String,
         default:'pending'
     }
+
 })
 
-const   Exihibitio=model('order',userSchema)
-export default Order
+const   Exihibitionorders=model('exihibitionorders',userSchema)
+export default Exihibitionorders

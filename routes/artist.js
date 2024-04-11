@@ -4,13 +4,16 @@ import Add_product from '../models/add_product.js'
 import Sub_category from '../models/sub_category.js'
 import { upload } from '../multer.js'
 import Exihibition_register from '../models/exihibition_register.js'
-import Exihibition_productadd from '../models/exihiition_product_add.js'
+
 import Send_offlineexihibition from '../models/send_offline_exihibition.js'
 import User from '../models/user.js'
 import Category from '../models/category.js'
 import Order from '../models/order.js'
 import Send_onlineexihibition from '../models/send_online_exihibition.js'
 import Create_exihibition from '../models/create_exihibition.js'
+// import Exihibition_productadd from '../models/exihiition_product_add.js'
+import Exihibitionorders from '../models/exihibition_orders.js'
+import Exihibition_productadd from '../models/exihiition_product_add.js'
 const router=express()
 
 router.post('/addproduct',upload.single("Image"),async(req,res)=>{
@@ -51,12 +54,12 @@ router.post('/exihibitionregister',upload.single("image"),async(req,res)=>{
     }
 })
 
-router.post('/exihibitionproductadd',upload.single("Image"),async(req,res)=>{
+router.post('/exihibitionproductadd',upload.single("image"),async(req,res)=>{
     try{
         console.log(req.body)
         console.log(req.files);
         console.log(req.file);
-        let exihibition_productadd=new Exihibition_productadd({...req.body,Image:req.file?.filename})
+        let exihibition_productadd=new Exihibition_productadd({...req.body,image:req.file?.filename})
         
         let response=await exihibition_productadd.save()
         res.json(response)
@@ -106,13 +109,14 @@ router.get('/viewofflineexihibition/:id',async(req,res)=>{
 router.get('/viewproductorder/:id',async(req,res)=>{
     let id=req.params.id
     let response=await Add_product.find({artistId:id})
-    console.log(response);
+    console.log(response,'+++++');
     let responseData=[]
     for (const prod of response){
-        console.log(prod,']]]]]]]]]');
+        console.log(prod._id,']]]]]]]]]');
         let orders =await Order.find({productId:prod._id})
+        console.log(orders,'/////')
         for(let  ord of orders){
-            console.log(ord,'orders --------------');
+            console.log(ord,'orders ++++++++++++');
             let user=await User.findById(ord.userId);
         let sub_categories=await Sub_category.findById(prod.sub_categoryid)
         let categories=await Category.findById(sub_categories.categoryid)
@@ -250,6 +254,35 @@ router.put('/editaddproduct/:id',upload.fields([{name:'Image'}]),async(req,res)=
 router.delete('/deleteproduct/:id',async(req,res)=>{
     let id=req.params.id
     let response=await Add_product.findByIdAndDelete(id)
+})
+
+router.get('/viewexihibitionorder/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Exihibitionorders.find({userId:id})
+    console.log(response,'+++++');
+    let responseData=[]
+    for (const order of response){
+        console.log(order._id,'000')
+        let product=await Exihibition_productadd.findById(order.productId)
+        let exhibition=await Create_exihibition.findById(product.exihibitionid)
+        console.log(product,'6666666')
+
+    let sub_categories=await Sub_category.findById(product.sub_categoryid)
+    let categories=await Category.findById(sub_categories.categoryid)
+    responseData.push({
+        product:product,
+            sub_categories:sub_categories,
+            categories:categories,
+            exhibition:exhibition
+        })
+    
+    }
+
+
+
+    
+    res.json(responseData)
+    
 })
 
 export default router

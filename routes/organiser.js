@@ -80,6 +80,8 @@ router.put('/manageexhibitionartist/:id',async(req,res)=>{
 
 })
 
+// router.get('/viewcreatedexihibition/:id',async(req,res))
+
 
 
 export default router
