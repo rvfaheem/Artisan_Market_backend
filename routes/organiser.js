@@ -80,6 +80,13 @@ router.put('/manageexhibitionartist/:id',async(req,res)=>{
 
 })
 
+router.get('/viewexihibitions',async(req,res)=>{
+    console.log(req.body)
+    let response=await Create_exihibition.find()
+    console.log(response);
+    res.json(response)
+})
+
 // router.get('/viewcreatedexihibition/:id',async(req,res))
 
 

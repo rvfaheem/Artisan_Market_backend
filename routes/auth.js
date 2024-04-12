@@ -65,4 +65,12 @@ router.put('/editprofile/:id',upload.fields([{name:'image'},{name:"id_proof"}]),
     console.log(response);
 })
 
+router.post('/api/auth/authenticate',async (req,res)=>{
+    console.log(req.body);
+    let response=await  User.findOne(req.body)
+    console.log(response);
+    res.json(response)
+
+})
+
 export default router
