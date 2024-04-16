@@ -285,4 +285,11 @@ router.get('/viewexihibitionorder/:id',async(req,res)=>{
     
 })
 
+router.get('/viewupdateexihibition/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Create_exihibition.findById(id)
+    console.log(response);
+    res.json(response)
+})
+
 export default router

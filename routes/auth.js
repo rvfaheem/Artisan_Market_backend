@@ -36,9 +36,11 @@ catch(e){
 
 router.post('/login',async(req,res)=>{
     console.log(req.body);
-    let users=await User.findOne(req.body)
+    const{gmail,password}=req.body
+    let users=await User.findOne({gmail:gmail,password:password})
     console.log(users);
     res.json(users)
+
 })
 
 router.get('/viewprofile/:id',async(req,res)=>{

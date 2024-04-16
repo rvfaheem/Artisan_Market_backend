@@ -40,6 +40,10 @@ const userSchema =new Schema({
     Description:{
         type:String,
         required:true,
+    },
+    status:{
+        type:String,
+        default:'forsale'
     }
 
 })

@@ -87,6 +87,24 @@ router.get('/viewexihibitions',async(req,res)=>{
     res.json(response)
 })
 
+router.delete('/deleteproduct/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Create_exihibition.findByIdAndDelete(id)
+})
+
+router.put('/editexihibition/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
+    if(req.files['Image']){
+        let imagePath=req.files['Image'][0].filename
+        req.body={...req.body,Image:imagePath}
+    }
+   
+    console.log(req.body);
+    let id=req.params.id
+    // console.log(req.body);
+    let response=await Create_exihibition.findByIdAndUpdate(id,req.body)
+    console.log(response);
+})
+
 // router.get('/viewcreatedexihibition/:id',async(req,res))
 
 
