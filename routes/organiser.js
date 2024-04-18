@@ -105,6 +105,40 @@ router.put('/editexihibition/:id',upload.fields([{name:'Image'}]),async(req,res)
     console.log(response);
 })
 
+
+router.get('/viewupdateofflineexihibition/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Send_offlineexihibition.findById(id)
+    console.log(response);
+    res.json(response)
+})
+
+
+router.get('/viewofflineexihibitions',async(req,res)=>{
+    console.log(req.body)
+    let response=await Send_offlineexihibition.find()
+    console.log(response);
+    res.json(response)
+})
+
+router.delete('/deleteexihibition/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Send_offlineexihibition.findByIdAndDelete(id)
+})
+
+router.put('/editofflineexihibition/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
+    if(req.files['Image']){
+        let imagePath=req.files['Image'][0].filename
+        req.body={...req.body,Image:imagePath}
+    }
+   
+    console.log(req.body);
+    let id=req.params.id
+    // console.log(req.body);
+    let response=await Send_offlineexihibition.findByIdAndUpdate(id,req.body)
+    console.log(response);
+})
+
 // router.get('/viewcreatedexihibition/:id',async(req,res))
 
 

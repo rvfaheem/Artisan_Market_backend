@@ -60,7 +60,37 @@ router.put('/manageUser/:id',async(req,res)=>{
 
 })
 
+router.get('/viewsubcategory',async(req,res)=>{
 
+    let response=await Sub_category.find()
+    let responseData=[]
+    for(let x of response ){
+        let cat=await Category.findById(x.categoryid)
+        responseData.push({
+        category:x,
+        subcategory:cat,  
+        })
+    }
+    
+    res.json(responseData)
+})
+
+router.put('/editcategory/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id,'in cat');
+    let response=await Category.findByIdAndUpdate(id,req.body)
+    console.log(response)
+    res.json(response)
+})
+
+router.put('/editsubcategory/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id,'in subcat');
+
+    let response=await Sub_category.findByIdAndUpdate(id,req.body)
+    console.log(response)
+    res.json(response)
+})
 
 
 export default router

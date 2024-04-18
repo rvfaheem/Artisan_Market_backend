@@ -23,6 +23,9 @@ const userSchema = new Schema({
     status:{
         type:String,
         default:'pending'
+    },
+    feedback:{
+        type:String,
     }
 })
 

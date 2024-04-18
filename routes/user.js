@@ -38,6 +38,11 @@ router.get('/viewproduct',async(req,res)=>{
         {
             $unwind: "$sub_category"
         },
+        {
+            $match: {
+                status: "forsale" // Assuming 'status' is the field name
+            }
+        }
 
     ])
 
@@ -56,8 +61,10 @@ router.get('/viewproductdetails/:id',async(req,res)=>{
 })
 
 router.post('/addorder',async(req,res)=>{
+    // let id=req.params.id
     console.log(req.body);
     let newOrder=await Order(req.body)
+    let response1=await Add_product.findByIdAndUpdate(req.body.productId,{status:'sold'})
     let response=await newOrder.save()
     console.log(response)
     res.json(response)
@@ -217,6 +224,14 @@ router.post('/exihiaddorder',async(req,res)=>{
     console.log(req.body);
     let newOrder=await Exihibitionorders(req.body)
     let response=await newOrder.save()
+    console.log(response)
+    res.json(response)
+})
+
+router.put('/sendfeedback/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Order.findByIdAndUpdate(id,req.body)
+
     console.log(response)
     res.json(response)
 })

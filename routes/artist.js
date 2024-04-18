@@ -1,5 +1,4 @@
 import express from 'express'
-
 import Add_product from '../models/add_product.js'
 import Sub_category from '../models/sub_category.js'
 import { upload } from '../multer.js'
@@ -160,12 +159,26 @@ router.get('/viewexihibitionregister/:id',async(req,res)=>{
     console.log(response);
     res.json(responseData)
 })
-
 router.get('/viewonlineexihibitions',async(req,res)=>{
-    console.log(req.body)
-    let response=await Create_exihibition.find()
-    console.log(response);
-    res.json(response)
+  
+        // Get current date
+        const currentDate = new Date();
+
+        // Find all exhibitions
+        const exhibitions = await Create_exihibition.find();
+
+        // Filter ongoing and upcoming exhibitions
+        const filteredExhibitions = exhibitions.filter(exhibition => {
+            const startDate = new Date(exhibition.startdate);
+            const endDate = new Date(exhibition.enddate);
+
+            // If the current date is between start and end date, or after the start date, it's ongoing
+            // If the current date is before the start date, it's upcoming
+            return (currentDate >= startDate && currentDate <= endDate);
+        });
+
+        res.json(filteredExhibitions);
+     
 })
 
 router.get('/viewonlineexihibitiondetails/:id',async(req,res)=>{
@@ -290,6 +303,42 @@ router.get('/viewupdateexihibition/:id',async(req,res)=>{
     let response=await Create_exihibition.findById(id)
     console.log(response);
     res.json(response)
+})
+
+User
+router.get('/viewonlineexihibitions_b',async(req,res)=>{
+    console.log(req.body)
+    let response=await Create_exihibition.find()
+    console.log(response);
+    res.json(response)
+})
+
+router.get('/deliveredviewproductorder/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Add_product.find({artistId:id})
+    console.log(response,'+++++');
+    let responseData=[]
+    for (const prod of response){
+        console.log(prod._id,']]]]]]]]]');
+        let orders =await Order.find({productId:prod._id,status:'delivered'})
+        console.log(orders,'/////')
+        for(let  ord of orders){
+            console.log(ord,'orders ++++++++++++');
+            let user=await User.findById(ord.userId);
+        let sub_categories=await Sub_category.findById(prod.sub_categoryid)
+        let categories=await Category.findById(sub_categories.categoryid)
+        responseData.push({
+            users:user,
+            sub_categories:sub_categories,
+            categories:categories,
+            product:prod,
+            orders:ord
+            
+        })
+        
+    }
+    }
+    res.json(responseData)
 })
 
 export default router
