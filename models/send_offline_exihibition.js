@@ -34,6 +34,10 @@ const userSchema=new Schema({
     organiserId:{
         type:mongoose.Types.ObjectId,
         ref:User
+    },
+    status:{
+        type:String,
+        
     }
 })
 

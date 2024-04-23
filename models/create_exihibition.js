@@ -32,6 +32,10 @@ const userSchema =new Schema({
     enddate:{
         type:Date,
         required:true,
+    },
+    status:{
+        type:String,
+        
     }
 })
 

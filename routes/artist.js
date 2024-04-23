@@ -3,6 +3,7 @@ import Add_product from '../models/add_product.js'
 import Sub_category from '../models/sub_category.js'
 import { upload } from '../multer.js'
 import Exihibition_register from '../models/exihibition_register.js'
+// import Exihibitionorders from '../models/exihibition_orders.js'
 
 import Send_offlineexihibition from '../models/send_offline_exihibition.js'
 import User from '../models/user.js'
@@ -13,6 +14,7 @@ import Create_exihibition from '../models/create_exihibition.js'
 // import Exihibition_productadd from '../models/exihiition_product_add.js'
 import Exihibitionorders from '../models/exihibition_orders.js'
 import Exihibition_productadd from '../models/exihiition_product_add.js'
+// import { Exihibition_orders } from '../../artisan/src/USER/Exihibition_orders.jsx'
 const router=express()
 
 router.post('/addproduct',upload.single("Image"),async(req,res)=>{
@@ -341,4 +343,87 @@ router.get('/deliveredviewproductorder/:id',async(req,res)=>{
     res.json(responseData)
 })
 
+router.put('/viewupdateexhibitionstatus/:id', async (req, res) => {
+    let id = req.params.id;
+    let exhibition = await Create_exhibition.findById(id);
+
+    if (exhibition.endDate < new Date()) {
+        // If the exhibition end date is in the past,
+        // consider it as expired and return an appropriate response
+        return res.status(404).json({ message: "Exhibition not found or has ended." });
+    }
+
+    console.log(exhibition);
+    res.json(exhibition);
+});
+
+router.put('/viewofflineupdateexihibitionstatus/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Send_offlineexihibition.findById(id)
+    console.log(response);
+    res.json(response)
+})
+
+router.get('/exhviewproductorder/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id);
+    let response=await Exihibition_productadd.find({artistid:id})
+    console.log(response,'+++++');
+    let responseData=[]
+    for (const prod of response){
+        console.log(prod._id,']]]]]]]]]');
+        let orders =await Exihibitionorders.find({productId:prod._id})
+        for(let  ord of orders){
+            let user=await User.findById(ord.userId);
+        let sub_categories=await Sub_category.findById(prod.sub_categoryid)
+        let categories=await Category.findById(sub_categories.categoryid)
+        responseData.push({
+            users:user,
+            sub_categories:sub_categories,
+            categories:categories,
+            product:prod,
+            orders:ord
+            
+        })
+        
+    }
+    }
+    res.json(responseData)
+})
+
+router.put('/exhimanageDelivery/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(id)
+    console.log(req.body)
+    let response=await Exihibitionorders.findByIdAndUpdate(id,req.body)
+    console.log(response);
+})
+
+router.get('/exihideliveredviewproductorder/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Exihibition_productadd.find({artistId:id})
+    console.log(response,'+++++');
+    let responseData=[]
+    for (const prod of response){
+        console.log(prod._id,']]]]]]]]]');
+        let orders =await Exihibitionorders.find({productId:prod._id,status:'delivered'})
+        console.log(orders,'/////')
+        for(let  ord of orders){
+            console.log(ord,'orders ++++++++++++');
+            let user=await User.findById(ord.userId);
+        let sub_categories=await Sub_category.findById(prod.sub_categoryid)
+        let categories=await Category.findById(sub_categories.categoryid)
+        responseData.push({
+            users:user,
+            sub_categories:sub_categories,
+            categories:categories,
+            product:prod,
+            orders:ord
+            
+        })
+        
+    }
+    }
+    res.json(responseData)
+})
 export default router

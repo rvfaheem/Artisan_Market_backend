@@ -9,6 +9,7 @@ import Category from '../models/category.js';
 import Exihibition_productadd from '../models/exihiition_product_add.js';
 import Create_exihibition from '../models/create_exihibition.js';
 import Exihibitionorders from '../models/exihibition_orders.js';
+import Send_offlineexihibition from '../models/send_offline_exihibition.js';
 
 const router=express()
 
@@ -234,6 +235,15 @@ router.put('/sendfeedback/:id',async(req,res)=>{
 
     console.log(response)
     res.json(response)
+})
+
+router.get('/viewoflinexihibitiondetailsuser/:id',async(req,res)=>{
+    let id=req.params.id
+
+    let response=await Send_offlineexihibition.findById(id)
+    console.log(response);
+    res.json(response)
+
 })
 
 export default router

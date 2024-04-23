@@ -50,6 +50,13 @@ const userSchema = new Schema({
     status:{
         type:String,
         default:'pending'
+    },
+    post:{
+        type:String,
+        
+    },
+    district:{
+        type:String,
     }
 
 
