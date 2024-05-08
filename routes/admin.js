@@ -4,6 +4,7 @@ import Category from '../models/category.js'
 import Sub_category from '../models/sub_category.js'
 import User from '../models/user.js'
 
+
 router.post('/addcategory',async(req,res)=>{
     try{
         console.log(req.body)

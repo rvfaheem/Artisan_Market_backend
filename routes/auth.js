@@ -1,8 +1,35 @@
 import express from 'express'
 import  User  from '../models/user.js'
 import { upload } from '../multer.js'
+import nodemailer from 'nodemailer'
 const router=express()
 
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'rvfaheem2@gmail.com',
+      pass: 'uqqr kvdt bcpm odvm',
+    },
+  });
+  
+router.post('/sendOTP', async (req, res) => {
+    const { email } = req.body;
+    const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+    const mailOptions = {
+      from: 'rvfaheem2@gmail.com',
+      to: email,
+      subject: 'Your OTP for Verification',
+      text:`Your OTP is: ${otp}`,
+    };
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      res.status(200).send({ message: 'OTP sent successfully',otp });
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      res.status(500).send({ error: 'Failed to send OTP' });
+    }
+  });
 
 router.post('/register',upload.fields([{name:'image'},{name:"idproof"},{name:"artwork"},{name:"Experience"}]),async(req,res)=>{
     try{
@@ -88,6 +115,16 @@ router.post('/api/auth/authenticate',async (req,res)=>{
     console.log(response);
     res.json(response)
 
+})
+
+router.put('/changepass/:email',async(req,res)=>{
+    let email=req.params.email
+    let response=await User.findOne({gmail:email})
+    console.log(email)
+    console.log(response);
+    let response1=await User.findByIdAndUpdate(response?._id, req.body,{new:true})
+    console.log(req.body); 
+    console.log(response1);
 })
 
 export default router

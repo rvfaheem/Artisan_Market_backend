@@ -196,7 +196,10 @@ router.get('/viewonlineexihibitiondetailsuser/:id',async(req,res)=>{
 router.get('/viewexihibitionproduct1/:id',async(req,res)=>{
     let id=req.params.id
 
-    let response=await Exihibition_productadd.find({exihibitionid:id})
+    // let response2=await Create_exihibition.find()
+    // console.log(response2)
+
+    let response=await Exihibition_productadd.find({exihibitionid:id,status:'forsale'})
     console.log(response,'--------------');
 
     let responsedata=[]
@@ -207,13 +210,20 @@ router.get('/viewexihibitionproduct1/:id',async(req,res)=>{
 
         let category=await Category.findById(subcategory.categoryid)
         console.log(category,'===========================');
-
+        
         responsedata.push({
             subcategory:subcategory,
             category:category,
             product:response1,
+            // abc:response2,
             
-        })
+        },
+    ),
+        {
+            $match: {
+                status: "forsale" // Assuming 'status' is the field name
+            }
+        }
 
     
     }
@@ -224,6 +234,7 @@ router.get('/viewexihibitionproduct1/:id',async(req,res)=>{
 router.post('/exihiaddorder',async(req,res)=>{
     console.log(req.body);
     let newOrder=await Exihibitionorders(req.body)
+    let response1=await Exihibition_productadd.findByIdAndUpdate(req.body.productId,{status:'sold'})
     let response=await newOrder.save()
     console.log(response)
     res.json(response)
@@ -244,6 +255,41 @@ router.get('/viewoflinexihibitiondetailsuser/:id',async(req,res)=>{
     console.log(response);
     res.json(response)
 
+})
+
+router.get('/exihivieworders/:id',async(req,res)=>{
+    let id=req.params.id
+    let response=await Exihibitionorders.find({userId:id})
+    console.log(response);
+    let responsedata=[]
+    for (const newresponse of response){
+        console.log(newresponse.productId,'sdsdsf');
+        let products=await Exihibition_productadd.findById(newresponse.productId)
+        console.log(products,'-==-=-=-=-=-=-=-=-=-=-=-=-');
+        if(products){
+
+
+            let subcategory=await Sub_category.findById(products.sub_categoryid)
+            console.log(subcategory,'[[[[[[[[[[[');
+            let category=await Category.findById(subcategory.categoryid)
+            console.log(category);
+            
+            // let user=await  User.findById(newresponse.userId)
+            responsedata.push({
+                product:products,
+                order:newresponse,
+                subcategory:subcategory,
+                category:category
+                
+            })
+        }
+
+    }
+
+    res.json(responsedata)
+
+
+    
 })
 
 export default router

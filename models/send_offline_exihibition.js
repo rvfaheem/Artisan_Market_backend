@@ -28,7 +28,7 @@ const userSchema=new Schema({
         required:true,
     },
     endingdate:{
-        type:String,
+        type:Date,
         required:true,
     },
     organiserId:{

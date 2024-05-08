@@ -39,6 +39,10 @@ const userSchema=new Schema({
     rate:{
         type:String,
         required:true,
+    },
+    status:{
+        type:String,
+        default:'forsale'
     }
 })
 

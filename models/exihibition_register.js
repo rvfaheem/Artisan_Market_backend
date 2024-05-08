@@ -12,6 +12,10 @@ const userSchema =new Schema({
         type:String,
         required:true,
     },
+    category:{
+        type:String,
+        
+    },
     image:{
         type:String,
     },

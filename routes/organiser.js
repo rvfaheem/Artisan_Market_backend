@@ -65,11 +65,20 @@ router.post('/Sendonline',upload.single("image"),async(req,res)=>{
     }
 })
 
-router.get('/viewexihibitionartist',async(req,res)=>{
-    let response=await Exihibition_register.find()
-    console.log(response)
-    res.json(response)
-})
+router.get('/viewexihibitionartist/:id', async (req, res) => {
+    let id = req.params.id;
+    console.log(id, '=-=-=-');
+    let exhibition = await Create_exihibition.find({ organisationId: id });
+    console.log(exhibition, '0000');
+    
+    let responseData = [];
+    for (let x of exhibition) {
+        let response = await Exihibition_register.find({ exihibitionid: x._id });
+        responseData = responseData.concat(response);
+    }
+    console.log(responseData, '===========');
+    res.json(responseData);
+});
 
 router.put('/manageexhibitionartist/:id',async(req,res)=>{
     let id=req.params.id
@@ -80,9 +89,10 @@ router.put('/manageexhibitionartist/:id',async(req,res)=>{
 
 })
 
-router.get('/viewexihibitions',async(req,res)=>{
+router.get('/viewexihibitions/:id',async(req,res)=>{
+    let id=req.params.id
     console.log(req.body)
-    let response=await Create_exihibition.find()
+    let response=await Create_exihibition.find({organisationId:id})
     console.log(response);
     res.json(response)
 })
@@ -92,10 +102,10 @@ router.delete('/deleteproduct/:id',async(req,res)=>{
     let response=await Create_exihibition.findByIdAndDelete(id)
 })
 
-router.put('/editexihibition/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
-    if(req.files['Image']){
-        let imagePath=req.files['Image'][0].filename
-        req.body={...req.body,Image:imagePath}
+router.put('/editexihibition/:id',upload.fields([{name:'image'}]),async(req,res)=>{
+    if(req.files['image']){
+        let imagePath=req.files['image'][0].filename
+        req.body={...req.body,image:imagePath}
     }
    
     console.log(req.body);
@@ -114,9 +124,10 @@ router.get('/viewupdateofflineexihibition/:id',async(req,res)=>{
 })
 
 
-router.get('/viewofflineexihibitions',async(req,res)=>{
+router.get('/viewofflineexihibitions/:id',async(req,res)=>{
+    let id=req.params.id
     console.log(req.body)
-    let response=await Send_offlineexihibition.find()
+    let response=await Send_offlineexihibition.find({organiserId:id})
     console.log(response);
     res.json(response)
 })
@@ -126,10 +137,10 @@ router.delete('/deleteexihibition/:id',async(req,res)=>{
     let response=await Send_offlineexihibition.findByIdAndDelete(id)
 })
 
-router.put('/editofflineexihibition/:id',upload.fields([{name:'Image'}]),async(req,res)=>{
-    if(req.files['Image']){
-        let imagePath=req.files['Image'][0].filename
-        req.body={...req.body,Image:imagePath}
+router.put('/editofflineexihibition/:id',upload.fields([{name:'image'}]),async(req,res)=>{
+    if(req.files['image']){
+        let imagePath=req.files['image'][0].filename
+        req.body={...req.body,image:imagePath}
     }
    
     console.log(req.body);

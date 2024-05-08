@@ -77,12 +77,21 @@ router.post('/exihibitionproductadd',upload.single("image"),async(req,res)=>{
 //     res.json(response)
 // })
 
-router.get('/viewofflineexihibitions',async(req,res)=>{
-    console.log(req.body)
-    let response =await Send_offlineexihibition.find()
-    console.log(response)
-    res.json(response)
-})
+router.get('/viewofflineexihibitions', async (req, res) => {
+    try {
+        // Get current date
+        const currentDate = new Date();
+
+        // Find exhibitions where end date is greater than current date
+        const filteredExhibitions = await Send_offlineexihibition.find({ endingdate: { $gt: currentDate } });
+        console.log(filteredExhibitions,);
+        res.json(filteredExhibitions);
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 router.get('/viewofflineexihibition/:id',async(req,res)=>{
     let id=req.params.id
@@ -114,7 +123,7 @@ router.get('/viewproductorder/:id',async(req,res)=>{
     let responseData=[]
     for (const prod of response){
         console.log(prod._id,']]]]]]]]]');
-        let orders =await Order.find({productId:prod._id})
+        let orders =await Order.find({productId:prod._id,status:'pending'})
         console.log(orders,'/////')
         for(let  ord of orders){
             console.log(ord,'orders ++++++++++++');
@@ -143,24 +152,36 @@ router.put('/manageDelivery/:id',async(req,res)=>{
     console.log(response);
 })
 
-router.get('/viewexihibitionregister/:id',async(req,res)=>{
-    console.log(req.body)
-    let id=req.params.id
-    let response=await Exihibition_register.find({userid:id,status:'accept'})
-   let responseData=[]
-    for( let x of response ){
-        let exhibitions=await Create_exihibition.findById(x.exihibitionid)
-        let org=await User.findById(exhibitions?.organisationId)
-        responseData.push({
-            registeration:x,
-            exhibition:exhibitions,
-            organisers:org
-        })
+router.get('/viewexihibitionregister/:id', async (req, res) => {
+    console.log(req.body);
+    let id = req.params.id;
+
+    let currentDate = new Date();
+    
+    let response = await Exihibition_register.find({ userid: id, status: 'accept' });
+
+    let responseData = [];
+
+    for (let x of response) {
+        let exhibitions = await Create_exihibition.findById(x.exihibitionid);
+        console.log(exhibitions?.enddate,'-----------------------');
+        console.log(currentDate,'-----=-=-=-=-====--------------------');
+        let org = await User.findById(exhibitions?.organisationId);
+
+        // Check if the end date of the exhibition is greater than the current date
+        if (exhibitions?.enddate > currentDate) {
+            responseData.push({
+                registeration: x,
+                exhibition: exhibitions,
+                organisers: org
+            });
+        }
     }
 
-    console.log(response);
-    res.json(responseData)
-})
+    console.log(responseData,'1111111111111111111111111111111111111');
+    res.json(responseData);
+});
+
 router.get('/viewonlineexihibitions',async(req,res)=>{
   
         // Get current date
@@ -308,12 +329,20 @@ router.get('/viewupdateexihibition/:id',async(req,res)=>{
 })
 
 User
-router.get('/viewonlineexihibitions_b',async(req,res)=>{
-    console.log(req.body)
-    let response=await Create_exihibition.find()
-    console.log(response);
-    res.json(response)
-})
+router.get('/viewonlineexihibitions_b', async (req, res) => {
+    try {
+        // Get current date
+        const currentDate = new Date();
+
+        // Find exhibitions where end date is greater than current date
+        const filteredExhibitions = await Create_exihibition.find({ enddate: { $gt: currentDate } });
+
+        res.json(filteredExhibitions);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 router.get('/deliveredviewproductorder/:id',async(req,res)=>{
     let id=req.params.id
@@ -372,7 +401,7 @@ router.get('/exhviewproductorder/:id',async(req,res)=>{
     let responseData=[]
     for (const prod of response){
         console.log(prod._id,']]]]]]]]]');
-        let orders =await Exihibitionorders.find({productId:prod._id})
+        let orders =await Exihibitionorders.find({productId:prod._id,status:'pending'})
         for(let  ord of orders){
             let user=await User.findById(ord.userId);
         let sub_categories=await Sub_category.findById(prod.sub_categoryid)
@@ -401,7 +430,7 @@ router.put('/exhimanageDelivery/:id',async(req,res)=>{
 
 router.get('/exihideliveredviewproductorder/:id',async(req,res)=>{
     let id=req.params.id
-    let response=await Exihibition_productadd.find({artistId:id})
+    let response=await Exihibition_productadd.find({artistid:id})
     console.log(response,'+++++');
     let responseData=[]
     for (const prod of response){
