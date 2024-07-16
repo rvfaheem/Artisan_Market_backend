@@ -5,7 +5,7 @@ import cors from 'cors'
 const app=express()
 app.use(express.json())
 app.use(cors())
-mongoose.connect('mongodb://127.0.0.1:27017/ArtisanMarket')
+mongoose.connect('mongodb+srv://rvfaheem:4xdu8L07kqALzp7K@cluster0.prmklkx.mongodb.net/ArtisanMarket')
   .then(() => console.log('Connected!'));
   app.use('/uploads', express.static('uploads'));
 import authRouter from './routes/auth.js'
