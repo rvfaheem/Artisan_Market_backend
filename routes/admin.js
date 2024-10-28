@@ -93,5 +93,15 @@ router.put('/editsubcategory/:id',async(req,res)=>{
     res.json(response)
 })
 
+//view exihibition
+
+router.get('/viewexihibitions/:id',async(req,res)=>{
+    let id=req.params.id
+    console.log(req.body)
+    let response=await Create_exihibition.find({organisationId:id})
+    console.log(response);
+    res.json(response)
+})
+
 
 export default router
